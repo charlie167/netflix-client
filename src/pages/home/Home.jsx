@@ -3,10 +3,13 @@ import axios from "axios";
 import Navbar from "../../components/navbar/Navbar";
 import Featured from "../../components/featured/Featured";
 import List from "../../components/list/List";
+import { useHistory } from "react-router-dom";
 
 import "./home.scss";
 
 const Home = ({ type }) => {
+  const history = useHistory();
+
   const [lists, setLists] = useState([]);
   const [genre, setGenre] = useState(null);
 
@@ -20,13 +23,15 @@ const Home = ({ type }) => {
           {
             headers: {
               token:
-                "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxNTU4NjM0YTEyMGM0YjAyNWM4OTg1MCIsImlzQWRtaW4iOnRydWUsImlhdCI6MTYzNTIxODY5OSwiZXhwIjoxNjM1NjUwNjk5fQ.FlmY3GsYMLugn7WII14gf32pN_cb75DeRoL72aaJpsk",
+                "Bearer " +
+                JSON.parse(localStorage.getItem("user")).accessToken,
             },
           }
         );
         setLists(res.data);
       } catch (error) {
         console.log(error);
+        history.push("/login");
       }
     };
     getRandomLists();
